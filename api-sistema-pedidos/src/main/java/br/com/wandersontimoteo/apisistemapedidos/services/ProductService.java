@@ -1,14 +1,13 @@
 package br.com.wandersontimoteo.apisistemapedidos.services;
 
 import br.com.wandersontimoteo.apisistemapedidos.entities.Product;
-import br.com.wandersontimoteo.apisistemapedidos.entities.User;
 import br.com.wandersontimoteo.apisistemapedidos.repositories.ProductRepository;
-import br.com.wandersontimoteo.apisistemapedidos.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ProductService {
@@ -20,8 +19,7 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public Product findById(Long id) {
-        Optional<Product> obj = productRepository.findById(id);
-        return obj.get();
+    public Optional<Product> findById(UUID id) {
+        return productRepository.findByUUID(id);
     }
 }

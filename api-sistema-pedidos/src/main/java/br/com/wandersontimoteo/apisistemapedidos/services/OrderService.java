@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class OrderService {
@@ -18,8 +19,7 @@ public class OrderService {
         return orderRepository.findAll();
     }
 
-    public Order findById(Long id) {
-        Optional<Order> obj = orderRepository.findById(id);
-        return obj.get();
+    public Optional<Order> findById(UUID id) {
+        return orderRepository.findByUUID(id);
     }
 }
