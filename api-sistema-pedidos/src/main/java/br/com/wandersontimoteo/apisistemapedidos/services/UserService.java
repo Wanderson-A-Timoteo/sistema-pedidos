@@ -4,6 +4,7 @@ import br.com.wandersontimoteo.apisistemapedidos.entities.User;
 import br.com.wandersontimoteo.apisistemapedidos.repositories.UserRepository;
 import br.com.wandersontimoteo.apisistemapedidos.services.exceptions.DatabaseException;
 import br.com.wandersontimoteo.apisistemapedidos.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -43,9 +44,13 @@ public class UserService {
     }
 
     public User updateUser(UUID id, User obj){
-        User updateUser = userRepository.getReferenceById(id);
-        updateData(updateUser, obj);
-        return userRepository.save(updateUser);
+        try {
+            User updateUser = userRepository.getReferenceById(id);
+            updateData(updateUser, obj);
+            return userRepository.save(updateUser);
+        } catch (EntityNotFoundException erro) {
+            throw new ResourceNotFoundException(id);
+        }
     }
 
     private void updateData(User updateUser, User obj) {
