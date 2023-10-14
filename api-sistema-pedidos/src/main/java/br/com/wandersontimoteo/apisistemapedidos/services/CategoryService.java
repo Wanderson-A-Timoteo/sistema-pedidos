@@ -25,4 +25,8 @@ public class CategoryService {
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
+    public Category insertCategory(Category obj) {
+        return  categoryRepository.save(obj);
+    }
+
 }
