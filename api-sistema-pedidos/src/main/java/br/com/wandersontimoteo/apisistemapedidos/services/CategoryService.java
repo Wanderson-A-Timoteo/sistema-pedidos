@@ -4,6 +4,7 @@ import br.com.wandersontimoteo.apisistemapedidos.entities.Category;
 import br.com.wandersontimoteo.apisistemapedidos.repositories.CategoryRepository;
 import br.com.wandersontimoteo.apisistemapedidos.services.exceptions.DatabaseException;
 import br.com.wandersontimoteo.apisistemapedidos.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -40,5 +41,19 @@ public class CategoryService {
         } catch (DataIntegrityViolationException err) {
             throw new DatabaseException(err.getMessage());
         }
+    }
+
+    public Category updateCategory(UUID id, Category obj){
+        try {
+            Category updateCategory = categoryRepository.getReferenceById(id);
+            updateData(updateCategory, obj);
+            return categoryRepository.save(updateCategory);
+        } catch (EntityNotFoundException erro) {
+            throw new ResourceNotFoundException(id);
+        }
+    }
+
+    private void updateData(Category updateCategory, Category obj) {
+        updateCategory.setName(obj.getName());
     }
 }
