@@ -2,8 +2,11 @@ package br.com.wandersontimoteo.apisistemapedidos.services;
 
 import br.com.wandersontimoteo.apisistemapedidos.entities.Product;
 import br.com.wandersontimoteo.apisistemapedidos.repositories.ProductRepository;
+import br.com.wandersontimoteo.apisistemapedidos.services.exceptions.DatabaseException;
 import br.com.wandersontimoteo.apisistemapedidos.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,5 +30,15 @@ public class ProductService {
 
     public Product insertProduct(Product obj) {
         return productRepository.save(obj);
+    }
+
+    public void deleteProduct(UUID id) {
+        try {
+            productRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException error) {
+            throw new ResourceNotFoundException(id);
+        } catch (DataIntegrityViolationException err) {
+            throw new DatabaseException(err.getMessage());
+        }
     }
 }
