@@ -2,6 +2,7 @@ package br.com.wandersontimoteo.apisistemapedidos.services;
 
 import br.com.wandersontimoteo.apisistemapedidos.entities.Product;
 import br.com.wandersontimoteo.apisistemapedidos.repositories.ProductRepository;
+import br.com.wandersontimoteo.apisistemapedidos.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +16,12 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public List<Product> findAll() {
+    public List<Product> findAllProducts() {
         return productRepository.findAll();
     }
 
-    public Optional<Product> findById(UUID id) {
-        return productRepository.findByUUID(id);
+    public Product findByIdProduct(UUID id) {
+        Optional<Product> obj = productRepository.findById(id);
+        return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 }
