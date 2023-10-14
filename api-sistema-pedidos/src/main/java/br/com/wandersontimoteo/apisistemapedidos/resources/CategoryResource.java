@@ -39,4 +39,10 @@ public class CategoryResource {
                 .toUri();
         return ResponseEntity.created(uri).body(obj);
     }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable UUID id) {
+        categoryService.deleteCategory(id);
+        return ResponseEntity.noContent().build();
+    }
 }

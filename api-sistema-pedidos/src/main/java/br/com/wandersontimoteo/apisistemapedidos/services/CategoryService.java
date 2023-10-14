@@ -2,8 +2,11 @@ package br.com.wandersontimoteo.apisistemapedidos.services;
 
 import br.com.wandersontimoteo.apisistemapedidos.entities.Category;
 import br.com.wandersontimoteo.apisistemapedidos.repositories.CategoryRepository;
+import br.com.wandersontimoteo.apisistemapedidos.services.exceptions.DatabaseException;
 import br.com.wandersontimoteo.apisistemapedidos.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,4 +32,13 @@ public class CategoryService {
         return  categoryRepository.save(obj);
     }
 
+    public void deleteCategory(UUID id) {
+        try {
+            categoryRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException error) {
+            throw new ResourceNotFoundException(id);
+        } catch (DataIntegrityViolationException err) {
+            throw new DatabaseException(err.getMessage());
+        }
+    }
 }
