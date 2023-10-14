@@ -28,14 +28,9 @@ public class UserResource {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> findById(@PathVariable UUID id) {
-        Optional<User> userOptional = userService.findById(id);
-        if (userOptional.isPresent()) {
-            return ResponseEntity.ok(userOptional.get());
-        } else {
-            CustomResponse customResponse = new CustomResponse("Não existe um usuário com o ID: " + id + " fornecido.");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(customResponse);
-        }
+    public ResponseEntity<User> findById(@PathVariable UUID id) {
+        User obj = userService.findById(id);
+        return ResponseEntity.ok().body(obj);
     }
 
     @PostMapping(value = "/cadastrar")

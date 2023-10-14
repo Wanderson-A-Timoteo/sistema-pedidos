@@ -2,6 +2,7 @@ package br.com.wandersontimoteo.apisistemapedidos.services;
 
 import br.com.wandersontimoteo.apisistemapedidos.entities.User;
 import br.com.wandersontimoteo.apisistemapedidos.repositories.UserRepository;
+import br.com.wandersontimoteo.apisistemapedidos.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +20,9 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> findById(UUID id) {
-        return userRepository.findByUUID(id);
+    public User findById(UUID id) {
+        Optional<User> obj = userRepository.findByUUID(id);
+        return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     public User insert(User obj) {
