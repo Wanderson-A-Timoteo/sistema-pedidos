@@ -1,9 +1,11 @@
 package br.com.wandersontimoteo.apisistemapedidos.services;
 
 import br.com.wandersontimoteo.apisistemapedidos.entities.Product;
+import br.com.wandersontimoteo.apisistemapedidos.entities.User;
 import br.com.wandersontimoteo.apisistemapedidos.repositories.ProductRepository;
 import br.com.wandersontimoteo.apisistemapedidos.services.exceptions.DatabaseException;
 import br.com.wandersontimoteo.apisistemapedidos.services.exceptions.ResourceNotFoundException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -40,5 +42,22 @@ public class ProductService {
         } catch (DataIntegrityViolationException err) {
             throw new DatabaseException(err.getMessage());
         }
+    }
+
+    public Product updateProduct(UUID id, Product obj){
+        try {
+            Product updateProduct = productRepository.getReferenceById(id);
+            updateData(updateProduct, obj);
+            return productRepository.save(updateProduct);
+        } catch (EntityNotFoundException erro) {
+            throw new ResourceNotFoundException(id);
+        }
+    }
+
+    private void updateData(Product updateProduct, Product obj) {
+        updateProduct.setName(obj.getName());
+        updateProduct.setDescription(obj.getDescription());
+        updateProduct.setPrice(obj.getPrice());
+        updateProduct.setImgUrl(obj.getImgUrl());
     }
 }

@@ -1,6 +1,7 @@
 package br.com.wandersontimoteo.apisistemapedidos.resources;
 
 import br.com.wandersontimoteo.apisistemapedidos.entities.Product;
+import br.com.wandersontimoteo.apisistemapedidos.entities.User;
 import br.com.wandersontimoteo.apisistemapedidos.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -44,5 +45,11 @@ public class ProductResource {
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<Product> update(@PathVariable UUID id, @RequestBody Product obj) {
+        obj = productService.updateProduct(id, obj);
+        return ResponseEntity.ok().body(obj);
     }
 }
