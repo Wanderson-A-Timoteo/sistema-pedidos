@@ -22,4 +22,8 @@ public class UserService {
     public Optional<User> findById(UUID id) {
         return userRepository.findByUUID(id);
     }
+
+    public User insert(User obj) {
+        return  userRepository.save(obj);
+    }
 }
