@@ -2,8 +2,11 @@ package br.com.wandersontimoteo.apisistemapedidos.services;
 
 import br.com.wandersontimoteo.apisistemapedidos.entities.User;
 import br.com.wandersontimoteo.apisistemapedidos.repositories.UserRepository;
+import br.com.wandersontimoteo.apisistemapedidos.services.exceptions.DatabaseException;
 import br.com.wandersontimoteo.apisistemapedidos.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,24 +19,30 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<User> findAll() {
+    public List<User> findAllUsers() {
         return userRepository.findAll();
     }
 
-    public User findById(UUID id) {
-        Optional<User> obj = userRepository.findByUUID(id);
+    public User findByIdUser(UUID id) {
+        Optional<User> obj = userRepository.findById(id);
         return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
-    public User insert(User obj) {
+    public User insertUser(User obj) {
         return  userRepository.save(obj);
     }
 
-    public void delete(UUID id) {
-        userRepository.deleteById(id);
+    public void deleteUser(UUID id) {
+        try {
+            userRepository.deleteById(id);
+        } catch (EmptyResultDataAccessException error) {
+            throw new ResourceNotFoundException(id);
+        } catch (DataIntegrityViolationException err) {
+            throw new DatabaseException(err.getMessage());
+        }
     }
 
-    public User update(UUID id, User obj){
+    public User updateUser(UUID id, User obj){
         User updateUser = userRepository.getReferenceById(id);
         updateData(updateUser, obj);
         return userRepository.save(updateUser);
