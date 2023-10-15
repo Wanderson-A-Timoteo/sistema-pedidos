@@ -1,8 +1,10 @@
 package br.com.wandersontimoteo.apisistemapedidos.services.exceptions;
 
-public class ResourceNotFoundException extends RuntimeException {
+import java.io.Serial;
 
-    private static final long serialVersionLONG = 1L;
+public class ResourceNotFoundException extends RuntimeException {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     public ResourceNotFoundException(Object id) {
         super("Recurso não encontrado. Id: " + id);

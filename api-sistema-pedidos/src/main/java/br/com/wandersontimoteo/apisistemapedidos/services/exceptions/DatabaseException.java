@@ -1,8 +1,10 @@
 package br.com.wandersontimoteo.apisistemapedidos.services.exceptions;
 
-public class DatabaseException extends RuntimeException {
+import java.io.Serial;
 
-    private static final long serialVersionLONG = 1L;
+public class DatabaseException extends RuntimeException {
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     public DatabaseException(String msg) {
         super(msg);
